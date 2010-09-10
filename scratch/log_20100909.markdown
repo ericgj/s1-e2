@@ -1,0 +1,40 @@
+## First thoughts - 9 Sep 2010
+
+The problem domain reminds me of modelling baseball stats.  I find it easier to think about this way than in the github realm.  Of course baseball stats are insanely more multivariate.  But similarly, you have 'static' questions like _what pitchers have pitched at least one perfect game so far this year?_ ; and you have 'dynamic' questions like _who are the top 10 in RBIs right now?_ .  And (short of steroids :), nobody can take away the number of home runs a player has scored, which means you could (if you wanted to) optimize queries that start: 'of those who have 100 or more home runs in their careers, which ...'  by caching a list of those players as they hit a century.
+
+There seem to be several dimensions of interest to the stats, again like baseball but simpler.
+
+First of all, some stats are based on _a user taking an action_, either on his or her account (e.g. forking or creating a new repo), or on a project (commit, watch, branch, merge, etc.).  
+
+Other stats are based on _another user taking an action_, either on your account (following), or on your project (forking, watching, committing, pull requesting, etc.)  Some of these could be based either on counts of user actions or on counts of users.  For instance you could be interested in counts of unique users who have committed to your project, or counts of all commits.
+
+The basic requirements question is, which of these should have level (static) badges associated with them (and can then be optimized)?  And how to best handle ratings (dynamic) badges (e.g. user is in top 10% of ___ stat). 
+
+
+## Some assumptions
+
+Let's assume from Greg's description that stats only apply to users and not teams.
+
+Let's also assume there are no stats of interest lower than the level of the project and actions taken on it. For instance we don't care about the number of fast-forward vs non-fast-forward commits.  We don't care about counting rebases, etc.
+
+
+## Questions
+
+1. Are there any badges associated with taking an action on another user's repo as opposed to your own or in general?  For instance is there a 'good samaritan' badge for 1, 20, 50 commits in someone else's project? 
+
+2. Are there any 'static' badges that are based on period of time, for instance number of commits on a single project within a week?  
+
+
+## Limiting the problem domain to start
+
+I think we should start with Greg's examples, as they deal with most of the variety of dimensions sketched above:
+
+- user commits (in general)
+- forks of a single project 
+- dynamic ratings based on watchers of a single project
+
+With two more to round it out:
+
+- unique users who have commited to a single project
+- followers of a user
+

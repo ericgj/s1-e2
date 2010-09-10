@@ -1,0 +1,63 @@
+SEACREATURE:
+anteaya, anteaya you do not need to use git or github as a real source
+you just need to come up with stubbed stats that solve the problem
+the runnable examples would set up those stubs and show what achievements were applied and what weren't. Actually, 95% of the 'examples' could just be unit tests
+
+andev: 	but do we need to take into account anything other than commits, watchers and forks?
+andev: 	that is more of the sort of things that can happen on github?
+
+SEACREATURE:
+You can come up with anything you want. I only put a theme on it to help narrow it down to a subject area
+You can come up with as many or as few scenarios as you want so long as you can show the flexibility of your system under the different performance conditions I described
+it might be useful / fun for you to take on the idea of what would happen if Github actually did this feature
+what achievements are possible, and what technological requirements would fall out of them for the system you are building
+but you'll also be creating more work for yourself, so tread with caution :)
+
+andev: 	yeah, it's easy to get carried away :)
+andev: 	so again, the runnable examples are basically unit tests?
+andev: 	then the scenarios would be built by fixture data of some sort?
+
+SEACREATURE:
+I'm leaving it open ended. What I need to see is something convincing that shows that you've got a working achievement system
+
+anteaya: 	back, sorry
+anteaya: 	seacreature, have we discussed whether this needs to be live or just runnable?
+anteaya: 	is it sufficient to have the code with the command to activate it via the command line?
+
+SEACREATURE:
+I'm not sure I understand the question
+since there is no real data source, there is no real notion of 'live' here
+so instead you might need to make a few stub data examples and show how the achievements are updated with the new stats
+
+andev: 	so if I understand it correctly, we need to stub out several users with fixed states, be able to alter these states, which would in turn update the stats of the user
+andev: 	wonder what kind of objects we could use to store the stats of the user - just simply store the state in the object or will we need to set up a database?
+andev: 	guess that again is up to us :)
+
+SEACREATURE:
+yes, that is up to you. You need to decide whether it is sufficient to sort of model a single event
+or if you're building the event triggering as well
+either can be okay
+
+andev: 	sorry, but I'm not quite sure what you mean by modeling a single event
+anteaya: 	I was picturing a rand function that altered the states by certain offsets and then a function that polled those states resulting in 'badge' output
+andev: 	That's an idea.
+andev: 	Still, how do you keep track of the states - we'd have to determine whether the object itself is sufficient to store the state.
+anteaya: 	to the states need to be tracked?
+anteaya: 	or simply polled
+anteaya: 	but if you are using certain badges as markers, the badge state may need to be saved
+andev: 	that's what I mean, I guess - just that you need to keep track of the user's current award state (that part may be fixed) and how that changes when the users github status gets updated (meaning more commits, for example)
+anteaya: 	yes
+anteaya: 	okay so what kind of approach to do that
+andev: 	at any time the user has two states, the "badge state" and the "github state"
+anteaya: 	so badges_received could be a hash but it would need to be stored somewhere
+anteaya: 	unless it is only of use for the duration of the running program, like a game
+andev: 	yes, I guess that can be stored in the object itself
+anteaya: 	in which case it can stay in the hash
+anteaya: 	what would the 'github state' contain and/or look like
+andev: 	github state = current number of commits, forks, repositories, watchers
+anteaya: 	okay
+anteaya: 	again an object of sorts
+andev: 	I guess it is the gihub state that changes more often
+anteaya: 	with some sort of algorythm adding to the various elements
+andev: 	which would trigger a change in the badge state
+
