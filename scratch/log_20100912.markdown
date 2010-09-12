@@ -1,0 +1,61 @@
+## Thoughts on modelling static badges - 12 Sep 2010
+
+The 'optimization' point of the problem is that _assuming a large number of possible badge types and levels_, it is necessary to determine ahead of time which stats to check given a specific event and given the badges the user already has.
+
+So we want something like (using a pseudo state machine syntax):
+
+    state :initial
+    state :committed_badge, :enter => :check_commit_badge
+    
+    event :commit do
+      transitions :to => :committed_badge, :from => :initial
+      transitions :to => :committed_badge, 
+                  :from => :committed_badge, 
+                  :guard => lambda {|u| [1..19].include?(u.committed_count)}
+      transitions :to => :committed_badge,
+                  :from => :committed,
+                  :guard => lambda {|u| [21..49].include?(u.committed_count)}
+    end
+
+ 
+Except this is pretty confused, not clear what the badge state should be a state _of_. 
+
+Let's say there is a _badge_ entity (keeping it basic now, just looking one type of badge, the commit badges).  A user `has_many` badges.  Each (static) badge has a level associated with it.
+
+The `events` are received by users (in some case two users - the owner of the repo and the user doing the action).
+
+Events may result in changes to the badge state of the user -- specifically, for static badges, it may result in additional badges.
+
+It's costly to load all a user's badges, and also costly to collect the stats (counts of commits, etc.). So we want to know given a particular event what are the minimum stats we need to load and use to determine possible new badges.
+
+So the question is really what state to keep around in the user model to minimize the loading.
+
+## A proposal.
+
+The user `has_many` actions.  The 'badges' (e.g. 1, 20, 50 commit badges) are generated 'on the fly' based on an action count, which can be cached either in the user model or (more flexibly) a 'user stats' model.  
+
+The UserStat model works like this: 
+
+- the action gets received by the user (pulled off of a queue and `user.actions << action`) and saved.  (This is presumably done already by Github at some level) ; 
+- a save callback in the action sends itself to a method in the user which
+- increments whichever user_stats need to be updated (e.g. commits, watches)
+
+Then in generating the badges, you only have to load the user_stats (one record per action type, basically), instead of every action a user has done.
+
+
+## Pieces of work
+
+1. Sample data
+2. The event generator (can adapt the EM queue I developed for the tests in exercise 1)
+3. User, UserStat, and Event (Action?) models  (AR or DM?)
+4. 'Virtual' model for badges
+
+
+## Another look at Github's existing model
+
+Github has three main user 'feeds', the __News Feed__, __Your Actions__, and __Pull Requests__.  The first two correspond to actions by others on your repo's (or repo's you watch), and actions you have taken.
+
+We have no idea how it is done, but let's assume this distinction is carried down into the data model so that there is a distinction between these two when actions are handled.  
+
+So the save callback should actually send itself both to the _actor_ user and the _repo owner_ user.  Or in the case of following a user, both to the _following_ and _followed_ user.
+
