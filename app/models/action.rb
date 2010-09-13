@@ -4,13 +4,13 @@ class Action
   property :id, Serial
   property :type, Discriminator
   
-  belongs_to, :actor, 'User'
+  belongs_to :actor, 'User'
   has 1, :repo
   
   after :save, :update_stats
   
   def update_stats
-    actor.increment_stat("#{type}Stat")
+    actor.increment_stat(type)
   end
   
 end

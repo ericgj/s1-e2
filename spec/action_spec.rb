@@ -1,11 +1,18 @@
-require 'bacon'
+require 'mocha'
+require 'baconmocha'
 
-describe 'Action', 'update_stats' do
+describe 'PushAction', 'save' do
 
-  context 'when a push' do
+  it 'should call #increment_stat on actor' do
+    Action.transaction do |t|
+      @subject = PushAction.new
+      @actor = User.new
+      @actor.expects(:increment_stat).with(@subject.type)
+      @subject.actor = @actor
+      @subject.save
       
-    it 'should change the actor push count'
-        
+      t.rollback
+    end
   end
-
+  
 end
