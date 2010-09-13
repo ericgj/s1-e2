@@ -3,9 +3,9 @@
 
 describe 'PushActionStat', 'badges' do
 
-  BADGE_NAME_1 = '1 push'
-  BADGE_NAME_20 = '20 pushes'
-  BADGE_NAME_50 = '50 pushes'
+  BADGE_NAME_1 = 'Shorty'
+  BADGE_NAME_20 = 'Homie'
+  BADGE_NAME_50 = 'Gangsta'
   
   shared 'having only 1st badge' do
     it 'should have one badge' do

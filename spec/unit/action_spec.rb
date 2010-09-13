@@ -1,5 +1,6 @@
 require 'mocha'
 require 'baconmocha'
+require 'dm-transactions'
 
 describe 'PushAction', 'save' do
 

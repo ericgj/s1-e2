@@ -30,6 +30,10 @@ namespace :test do
     Bacon.summary_on_exit
   end
   
+  task :badgeable => ['db:migrate', 'test:setup'] do
+    load 'spec/unit/badgeable_spec.rb'
+  end
+  
   task :user_stat => ['db:migrate', 'test:setup'] do
     load 'spec/unit/user_stat_spec.rb'
   end
@@ -43,12 +47,12 @@ namespace :test do
   end
   
   task :unit => ['db:migrate', 'test:setup'] do
-    Rake::Task['test:user_stat'].execute
-    Rake::Task['test:user'].execute
-    Rake::Task['test:action'].execute
+    puts "-----------------------\nUnit tests\n-----------------------"
+    Dir['spec/unit/**/*.rb'].each {|f| load f; puts "-----"}
   end
   
   task :integration => ['db:migrate', 'test:setup'] do
+    puts "-----------------------\nIntegration tests\n-----------------------"
   end
   
   task :all => ['db:migrate', 'test:setup'] do

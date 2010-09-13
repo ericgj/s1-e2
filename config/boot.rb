@@ -8,6 +8,11 @@ module Boot
   end
   
   def self.load
+    # load lib
+    Dir[File.join(File.dirname(__FILE__), '..', 'lib', '**', '*.rb')].each do |f|
+      require f
+    end
+    
     # load the models
     Dir[File.join(File.dirname(__FILE__), '..', 'app', 'models', '*.rb')].each do |f|
       require f

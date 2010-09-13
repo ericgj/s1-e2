@@ -19,3 +19,9 @@ end
 class PushAction < Action
 end
 
+class ForkAction < Action
+  def update_stats
+    super
+    repo.owner.increment_stat('ForkedAction')
+  end
+end
