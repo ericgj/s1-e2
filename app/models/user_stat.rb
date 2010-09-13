@@ -10,7 +10,7 @@ class UserStat
     unless badge.is_a?(Badge)
       badge = Badge.first_or_create(:name => badge)
     end
-    (@badges ||= {}) << [level, badge]
+    (@badges ||= []) << [level, badge]
   end
   
   def self.assigned_badges_for_level(level)

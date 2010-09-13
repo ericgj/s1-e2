@@ -1,0 +1,58 @@
+## Where we're at
+
+I've sketched the action, repo, user, user_stat and badge models.
+
+The work of determining badges comes down to the user_stat model, where subclasses define all level badges via class methods like:
+
+    badge 1, 'First committer!'
+    
+And the `assigned_badges_for_level` selects the badges based on the current level.
+
+Then the user model collects these into an array.
+
+This is fine assuming (1) all static badges are based on counts of actions, and (2) all static badges are based on single stats.
+
+You can imagine someone along the way will dream up a badge that involves several stats - e.g. something like _ratio of number of my repos forked to number of forks of my repos is > 2_ , or  _number of pull requests is greater than number of issues opened_ .
+
+
+## Dynamic badges
+
+In fact these are dynamic badges, and it is time we looked at these in general, including the dynamic badges that work across users (rating badges).
+
+Is it possible to model dynamic and static badges the same way or is a different approach needed?
+
+
+At first glance the interface for defining dynamic ratings badges might look like this:
+
+    badge 'Top 10% pusher' do |u| 
+      stats = UserStat.all.of_type('PushActionStat').top_pct(10)
+      stats.all.map(&:user_id).include?(u.id)
+    end
+    
+But here it makes more sense to define `badge` as a class method on User, not UserStat, as the thing yielded in the block, the thing being tested, is the User, not the single stat.  (The `top_pct` predicate groups by user id.)
+
+Which makes me think, you could implement the static badges pretty much the same way, with a little more work:
+
+    badge 'First committer!' do |u|
+      stat = u.stats.all.of_type('PushActionStat')
+      stat.count >= 1
+    end
+
+So you could do this 'under the covers' of the badge method -- if a second parameter is given and no block, and it's either a number or a range, then create a proc on the fly like this.
+
+I think the DataMapper DSL for chained predicates pretty much allows you to optimize the query in either case, but a possible enhancement would be to allow :if and :unless options which could run a less-expensive proc to determine first whether to check for the badge at all:
+
+    badge 'Bad Mother Forker', 
+          :if => Proc.new {|u| !u.repos.empty? } do |u|
+      stat = u.stats.all.of_type('ForkActionStat')
+      stat.count >= 50
+    end
+
+I'm thinking in terms of implementation, the badge method etc. could be a separate module that User `extend`s.  UserStat could delegate :badge to User, to make it easier to define the static badges within the UserStat (reducing clutter in the User).
+
+
+## Next steps
+
+I think the next steps though before even doing this, is to set up a test bed for our current implementation.  That will make the refactoring above easier.
+
+
