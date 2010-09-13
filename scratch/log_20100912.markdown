@@ -47,15 +47,18 @@ Then in generating the badges, you only have to load the user_stats (one record 
 
 1. Sample data
 2. The event generator (can adapt the EM queue I developed for the tests in exercise 1)
-3. User, UserStat, and Event (Action?) models  (AR or DM?)
+3. User, UserStat, and Action models  (AR or DM?)
 4. 'Virtual' model for badges
 
 
 ## Another look at Github's existing model
 
-Github has three main user 'feeds', the __News Feed__, __Your Actions__, and __Pull Requests__.  The first two correspond to actions by others on your repo's (or repo's you watch), and actions you have taken.
+Github has three main user 'feeds', the __News Feed__, __Your Actions__, and __Pull Requests__.  The first two correspond to (1) actions by others on your repo's (or repo's you watch), and (2) actions you have taken.
 
 We have no idea how it is done, but let's assume this distinction is carried down into the data model so that there is a distinction between these two when actions are handled.  
 
 So the save callback should actually send itself both to the _actor_ user and the _repo owner_ user.  Or in the case of following a user, both to the _following_ and _followed_ user.
 
+### Some complications to keep in mind
+
+Certain actions involve other entities besides a repo -- for instance pull request open/closed and issue open/closed.
