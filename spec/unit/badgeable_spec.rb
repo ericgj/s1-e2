@@ -1,6 +1,6 @@
 
 class Dummy
-  extend Badgeable::ClassMethods
+  extend Badgeable
   include Badgeable::InstanceMethods
 
   attr_accessor :name

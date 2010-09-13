@@ -1,5 +1,4 @@
 module Badgeable
-module ClassMethods
 
   def badge_callbacks
     @badge_callbacks ||= {}
@@ -11,16 +10,18 @@ module ClassMethods
     badge_callbacks[name] = blk
   end
 
-end
-
-module InstanceMethods
-  
-  def badges
-    self.class.badge_callbacks.keys.select do |k|
-      self.class.badge_callbacks[k].call(self)
+  module InstanceMethods
+    
+    def def_badge(*args, &blk)
+      self.class.badge(*args, &blk)
     end
+    
+    def badges
+      self.class.badge_callbacks.keys.select do |k|
+        self.class.badge_callbacks[k].call(self)
+      end
+    end
+    
   end
-  
-end
-  
+    
 end

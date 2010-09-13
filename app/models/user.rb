@@ -1,5 +1,7 @@
 class User
   include DataMapper::Resource
+  extend Badgeable
+  include Badgeable::InstanceMethods
   
   property :id, Serial
   property :name, String
@@ -8,11 +10,22 @@ class User
   has n, :repos
   has n, :stats, 'UserStat'
   
+  def self.level_badge(name, level = 1, klass = 'UserStat', &blk)
+    badge name do |u|
+      u.stats.of_type(klass).count >= level
+    end
+  end
+  
+  badge 'Top 10% pusher' do |u| 
+    stats = PushActionStat.top_pct(10)
+    stats.all.map(&:user_id).include?(u.id)
+  end
+    
+  level_badge 'Shorty', 1, 'PushActionStat'
+  level_badge 'Homie', 20, 'PushActionStat'
+  level_badge 'Gangsta', 50, 'PushActionStat'
+
   def increment_stat(action_type)
-#    unless stat = stats.first(:type => "#{action_type}Stat")
-#      stats << (stat = UserStat.new({:type => "#{action_type}Stat"}))
-#      stats.save
-#    end
     s = stat(action_type)
     s.count += 1
     s.save
@@ -20,14 +33,7 @@ class User
   
   def stat(action_type)
     UserStat.first_or_create(:user_id => id, :type => "#{action_type}Stat")
-  end
-  
-  def badges
-    stats.all.inject([]) do |memo, stat|
-      memo += stat.badges
-      memo
-    end
-  end
+  end 
   
 end
 
