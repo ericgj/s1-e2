@@ -43,7 +43,7 @@ So you could do this 'under the covers' of the badge method -- if a second param
 I think the DataMapper DSL for chained predicates pretty much allows you to optimize the query in either case, but a possible enhancement would be to allow :if and :unless options which could run a less-expensive proc to determine first whether to check for the badge at all:
 
     badge 'Bad Mother Forker', 
-          :if => Proc.new {|u| !u.repos.empty? } do |u|
+          :unless => Proc.new {|u| u.repos.count < 50 } do |u|
       stat = u.stats.all.of_type('ForkActionStat')
       stat.count >= 50
     end
