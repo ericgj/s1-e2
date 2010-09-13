@@ -5,7 +5,7 @@
 The requirements can be verified by running a test suite.  See below for details.
 
 
-## Requirements
+## Dependencies
 
 The models have been implemented in DataMapper.  The following DM gems are needed:
 

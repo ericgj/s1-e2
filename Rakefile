@@ -31,21 +31,29 @@ namespace :test do
   end
   
   task :user_stat => ['db:migrate', 'test:setup'] do
-    load 'spec/user_stat_spec.rb'
+    load 'spec/unit/user_stat_spec.rb'
   end
   
   task :user => ['db:migrate', 'test:setup'] do
-    load 'spec/user_spec.rb'
+    load 'spec/unit/user_spec.rb'
   end
   
   task :action => ['db:migrate', 'test:setup'] do
-    load 'spec/action_spec.rb'
+    load 'spec/unit/action_spec.rb'
   end
   
-  task :all => ['db:migrate', 'test:setup'] do
+  task :unit => ['db:migrate', 'test:setup'] do
     Rake::Task['test:user_stat'].execute
     Rake::Task['test:user'].execute
     Rake::Task['test:action'].execute
+  end
+  
+  task :integration => ['db:migrate', 'test:setup'] do
+  end
+  
+  task :all => ['db:migrate', 'test:setup'] do
+    Rake::Task['test:unit'].execute
+    Rake::Task['test:integration'].execute
   end
   
 end

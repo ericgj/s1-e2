@@ -1,0 +1,115 @@
+Mon, 13 Sep 2010 20:04:59 GMT  ~  info  ~  Logfile created
+ ~ (0.000000) SELECT sqlite_version(*)
+ ~ (0.000000) DROP TABLE IF EXISTS "actions"
+ ~ (0.000000) PRAGMA table_info("actions")
+ ~ (0.000000) CREATE TABLE "actions" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "type" VARCHAR NOT NULL, "actor_id" INTEGER NOT NULL)
+ ~ (0.000000) CREATE INDEX "index_actions_actor" ON "actions" ("actor_id")
+ ~ (0.000000) DROP TABLE IF EXISTS "actions"
+ ~ (0.000000) PRAGMA table_info("actions")
+ ~ (0.000000) CREATE TABLE "actions" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "type" VARCHAR NOT NULL, "actor_id" INTEGER NOT NULL)
+ ~ (0.001000) CREATE INDEX "index_actions_actor" ON "actions" ("actor_id")
+ ~ (0.000000) DROP TABLE IF EXISTS "badges"
+ ~ (0.000000) PRAGMA table_info("badges")
+ ~ (0.000000) CREATE TABLE "badges" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" VARCHAR(50))
+ ~ (0.000000) DROP TABLE IF EXISTS "repos"
+ ~ (0.001000) PRAGMA table_info("repos")
+ ~ (0.000000) CREATE TABLE "repos" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" VARCHAR(50), "action_id" INTEGER NOT NULL, "owner_id" INTEGER NOT NULL)
+ ~ (0.000000) CREATE INDEX "index_repos_owner" ON "repos" ("owner_id")
+ ~ (0.000000) CREATE INDEX "index_repos_action" ON "repos" ("action_id")
+ ~ (0.000000) DROP TABLE IF EXISTS "users"
+ ~ (0.000000) PRAGMA table_info("users")
+ ~ (0.000000) CREATE TABLE "users" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" VARCHAR(50))
+ ~ (0.000000) DROP TABLE IF EXISTS "user_stats"
+ ~ (0.000000) PRAGMA table_info("user_stats")
+ ~ (0.000000) CREATE TABLE "user_stats" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "count" INTEGER DEFAULT 0, "type" VARCHAR NOT NULL, "user_id" INTEGER NOT NULL)
+ ~ (0.000000) CREATE INDEX "index_user_stats_user" ON "user_stats" ("user_id")
+ ~ (0.000000) DROP TABLE IF EXISTS "user_stats"
+ ~ (0.000000) PRAGMA table_info("user_stats")
+ ~ (0.001000) CREATE TABLE "user_stats" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "count" INTEGER DEFAULT 0, "type" VARCHAR NOT NULL, "user_id" INTEGER NOT NULL)
+ ~ (0.000000) CREATE INDEX "index_user_stats_user" ON "user_stats" ("user_id")
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) INSERT INTO "badges" ("name") VALUES ('1 push')
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) INSERT INTO "badges" ("name") VALUES ('20 pushes')
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) INSERT INTO "badges" ("name") VALUES ('50 pushes')
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.001000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '1 push' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '20 pushes' ORDER BY "id" LIMIT 1
+ ~ (0.000000) SELECT "id", "name" FROM "badges" WHERE "name" = '50 pushes' ORDER BY "id" LIMIT 1
+ ~ default: begin
+ ~ (0.000000) BEGIN
+ ~ (0.000000) INSERT INTO "users" DEFAULT VALUES
+ ~ (0.000000) SELECT "id", "type", "count", "user_id" FROM "user_stats" WHERE ("user_id" = 1 AND "type" IN ('UserStat', 'PushActionStat') AND "type" = 'PushActionStat') ORDER BY "id" LIMIT 1
+ ~ (0.000000) INSERT INTO "user_stats" ("count", "type", "user_id") VALUES (0, 'PushActionStat', 1)
+ ~ (0.000000) UPDATE "user_stats" SET "count" = 1 WHERE "id" = 1
+ ~ (0.000000) SELECT "id", "type", "count", "user_id" FROM "user_stats" WHERE ("user_id" = 1 AND "type" IN ('UserStat', 'PushActionStat') AND "type" = 'PushActionStat') ORDER BY "id" LIMIT 1
+ ~ default: rollback
+ ~ (0.000000) ROLLBACK
+ ~ default: begin
+ ~ (0.000000) BEGIN
+ ~ (0.000000) INSERT INTO "users" DEFAULT VALUES
+ ~ (0.000000) INSERT INTO "user_stats" ("count", "type", "user_id") VALUES (50, 'PushActionStat', 1)
+ ~ (0.000000) SELECT "id", "type", "count", "user_id" FROM "user_stats" WHERE ("user_id" = 1 AND "type" IN ('UserStat', 'PushActionStat') AND "type" = 'PushActionStat') ORDER BY "id" LIMIT 1
+ ~ (0.000000) UPDATE "user_stats" SET "count" = 51 WHERE "id" = 1
+ ~ (0.000000) SELECT "id", "type", "count", "user_id" FROM "user_stats" WHERE ("user_id" = 1 AND "type" IN ('UserStat', 'PushActionStat') AND "type" = 'PushActionStat') ORDER BY "id" LIMIT 1
+ ~ default: rollback
+ ~ (0.000000) ROLLBACK
+ ~ default: begin
+ ~ (0.000000) BEGIN
+ ~ (0.000000) INSERT INTO "users" DEFAULT VALUES
+ ~ default: rollback
+ ~ (0.000000) ROLLBACK
