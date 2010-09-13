@@ -26,7 +26,7 @@ namespace :test do
   
   task :setup do
     require 'bacon'
-    Bacon.extend Bacon::TestUnitOutput
+    #Bacon.extend Bacon::TestUnitOutput
     Bacon.summary_on_exit
   end
   
