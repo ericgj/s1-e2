@@ -1,0 +1,45 @@
+
+#  some ideas....
+
+# something like
+require 'fixture_helper'
+Fixtures.load
+
+# then in spec context
+Repo.all.each do |r|
+  r.associate_random(:user)
+end
+
+# define this according to what you want to test
+push_action_map = {:name => { 'afcapel' => 3, 'aguids' => 1 }}
+
+User.all.each do |u|
+  u.associate_random(:actions, push_action_map[:name][u.name] || 0, :type => 'PushAction')
+end
+
+# or better
+PushAction.seed_random(:user => push_action_map)
+
+# or if you want to control the repo vs the user
+PushAction.seed_random(:repo => push_repo_map)
+
+#------------
+
+# Another (simpler) idea for generating the actions
+
+push_action_map = {'afcapel' => 3, 
+                   'aguids' => 1
+                  }
+
+push_action_map.each_pair |name, count|
+  count.times do
+    Seed::Action.generate(:type => 'PushAction', 
+                          :user => {:name => name}) do |a|
+      
+      a.repo = Seed::Repo.random
+      
+    end
+  end
+end
+
+

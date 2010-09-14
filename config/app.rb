@@ -1,4 +1,4 @@
-module Boot
+module App
   require 'rubygems'
   require 'dm-core'
 
@@ -30,5 +30,19 @@ module Boot
     # check for validity and initialize relationships
     DataMapper.finalize
   end
+
+  def self.boot(env = 'test')
+    connect(env)
+    load
+    finalize
+  end
+  
+  def self.boot!(env = 'test')
+    connect(env)
+    load
+    migrate!
+    finalize
+  end
   
 end
+

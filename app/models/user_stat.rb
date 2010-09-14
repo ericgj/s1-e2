@@ -1,18 +1,32 @@
+require 'dm-aggregates'
+
 class UserStat
   include DataMapper::Resource
+  extend Badgeable
+  include Badgeable::InstanceMethods
   
   property :id, Serial
   property :count, Integer, :default => 0
   property :type, Discriminator
   
   belongs_to :user
+    
+  # sugar for defining level badges
+  def self.level_badge(name, level = 1)
+    badge(name) do |s|
+      s.count >= level
+    end
+  end
   
-  # these can be used as association predicates
-  def of_type(t)
+  #----- these below can be used as association predicates
+  
+  def self.of_type(t)
     all(:type => t.to_s)
   end
   
-  def top_pct(pct = 10)
+  # possibly redo this as straight SQL instead of 2 queries
+  # DM's aggregate functions are limited in what they allow you to do
+  def self.top_pct(pct = 10)
     cnts = aggregate(:count.sum, :fields => [:user_id]).
               sort {|p| p[1]}.
               reverse
@@ -20,7 +34,9 @@ class UserStat
     all(:user_id => ids)
   end
   
-  def top_n(num = 10)
+  # possibly redo this as straight SQL instead of 2 queries
+  # DM's aggregate functions are limited in what they allow you to do
+  def self.top_n(num = 10)
     cnts = aggregate(:count.sum, :fields => [:user_id]).
               sort {|p| p[1]}.
               reverse
@@ -33,19 +49,20 @@ end
 # UserStat subclasses
 
 class PushActionStat < UserStat
+  level_badge 'Shorty', 1
+  level_badge 'Homie', 20
+  level_badge 'Gangsta', 50
 end
 
-__END__
-
 class ForkActionStat < UserStat
-  badge 1, 'Spooner'
-  badge 20, 'Forker'
-  badge 50, 'Bad Mother Forker'
+  level_badge 'Spooner', 1
+  level_badge 'Forker', 20
+  level_badge 'Bad Mother Forker', 50
 end
 
 class ForkedActionStat < UserStat
-  badge 1, 'Forked Dork'
-  badge 20, 'Forked Pork'
-  badge 50, 'Forked Zork'
+  level_badge 'Forked Dork', 1
+  level_badge 'Forked Pork', 20
+  level_badge 'Forked Zork', 50
 end
 

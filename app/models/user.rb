@@ -10,21 +10,26 @@ class User
   has n, :repos
   has n, :stats, 'UserStat'
   
-  def self.level_badge(name, level = 1, klass = 'UserStat', &blk)
-    badge name do |u|
-      u.stats.of_type(klass).count >= level
-    end
-  end
-  
+  #---- dynamic badge definitions
+  #---- note that static (level) badges are defined in UserStat subclasses
   badge 'Top 10% pusher' do |u| 
     stats = PushActionStat.top_pct(10)
     stats.all.map(&:user_id).include?(u.id)
   end
-    
-  level_badge 'Shorty', 1, 'PushActionStat'
-  level_badge 'Homie', 20, 'PushActionStat'
-  level_badge 'Gangsta', 50, 'PushActionStat'
 
+  # A bit cryptic, basically this evaluates all the badges defined here
+  # and adds to this the badges defined in the UserStats
+  # and then builds Badge objects based on the strings returned
+  alias_method :badges_original, :badges
+  def badges
+    stats.all.inject(badges_original) do |memo, s| 
+      memo += s.badges
+    end.map do |name|
+      Badge.first_or_create(:name => name)
+    end
+  end
+  
+  #---- called in Action after
   def increment_stat(action_type)
     s = stat(action_type)
     s.count += 1
