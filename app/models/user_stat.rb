@@ -12,8 +12,8 @@ class UserStat
   belongs_to :user
     
   # sugar for defining level badges
-  def self.level_badge(name, level = 1)
-    badge(name) do |s|
+  def self.level_badge(name, level = 1, opts = {})
+    badge(name, opts) do |s|
       s.count >= level
     end
   end
@@ -49,20 +49,20 @@ end
 # UserStat subclasses
 
 class PushActionStat < UserStat
-  level_badge 'Shorty', 1
-  level_badge 'Homie', 20
   level_badge 'Gangsta', 50
+  level_badge 'Homie', 20, :alt => Proc.new {|s| s.has_badge?('Gangsta')}
+  level_badge 'Shorty', 1, :alt => Proc.new {|s| s.has_badge?('Homie')}
 end
 
 class ForkActionStat < UserStat
-  level_badge 'Spooner', 1
-  level_badge 'Forker', 20
   level_badge 'Bad Mother Forker', 50
+  level_badge 'Forker', 20, :alt => Proc.new {|s| s.has_badge?('Bad Mother Forker')}
+  level_badge 'Spooner', 1, :alt => Proc.new {|s| s.has_badge?('Forker')}
 end
 
 class ForkedActionStat < UserStat
-  level_badge 'Forked Dork', 1
-  level_badge 'Forked Pork', 20
   level_badge 'Forked Zork', 50
+  level_badge 'Forked Pork', 20, :alt => Proc.new {|s| s.has_badge?('Forked Zork')}
+  level_badge 'Forked Dork', 1, :alt => Proc.new {|s| s.has_badge?('Forked Pork')}
 end
 

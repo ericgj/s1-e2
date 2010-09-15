@@ -27,6 +27,19 @@ Note that for now (13 Sep), only unit tests have been created.
 Integration tests are planned, as well as implementation of more badge types and single-repo based badges.
 
 
+## Summary of the approach
+
+I took the approach that *all* badges are dynamic, in the sense that they are not stored in any state of the User or other model object, but calculated from other state.  
+
+This does mean that potentially a lot of queries would be run each time you want to determine the badges, but my approach was to optimize this by 
+
+  1. caching counts of relevant actions in a 'UserStat' model, which could be eager-loaded along with the user; and 
+  2. memoizing the badge evaluations so that each condition is evaluated at most once, even for badges that depend on or check for other badges.
+
+Given the way I approached it, the suggestion in the description of the problem for how to optimize level-based badges 
+
+
+
 ## Basics of my 'badge DSL'
 
 Any model -- not just the User -- that you want to collect stats on and determine one or more badges on the basis of these stats, simply needs to 
@@ -53,9 +66,9 @@ I found many advantages to separating out the `Badgeable` mechanics.  Unit testi
 
 But also it makes it easier to deal with part of the problem I haven't tackled yet, which is _collecting stats and assigning badges to users on the basis of actions on single repo's they own_.  I anticipate in the future making the Repo model `Badgeable`, and expanding the User badges method to pull in badges from their repos, as well as from their own actions.
 
-## Enhancements
+__New as of 15 Sep__:
 
-The other proposed enhancement is to allow :if and :unless options when defining the badge conditions.  The idea is you could run a less-expensive proc first to check whether it is even possible that the user would have the badge, before running the (presumably more-expensive) badge evaluation.  
+You are allowed :if and :unless options when defining the badge conditions.  The idea is you could run a less-expensive proc first to check whether it is even possible that the user would have the badge, before running the (presumably more-expensive) badge evaluation.  
 
 So for instance in the case of the 'Bad Mother Forker' badge you could do:
 
@@ -67,12 +80,19 @@ So for instance in the case of the 'Bad Mother Forker' badge you could do:
 
 That is, if you have less than 50 repos anyway, you can't possibly have 50+ forks, and it's (maybe) easier to check a cached `repos.count` than to run `stats.of_type`.
 
-Also, we could then evaluate one badge on the basis of another -- which was one of the points of this exercise:
+The `:if` and `:unless` options simply determine whether or not to run the badge proc, and if the badge proc is not evaluated it returns false (don't have the badge).
 
-    badge 'Beginner', :if => Proc.new {|u| u.has_badge?('Intermediate')}
-    badge 'Intermediate', :if => Proc.new {|u| u.has_badge?('Advanced')}
-    
-This brings into focus the importance of memoizing the results of the badge evaluations.  That way, in this case, _regardless of which order the badges are evaluated_, the 'Intermediate' badge proc is only called once.
+But sometimes -- and more relevant to this exercise -- you want to **short-circuit** the evaluation: you want to check a precondition that, if true, means you don't have to actually run the evaluation, and the evaluation returns true (have the badge).
+
+For this I created the `:alt` option.  Here's how it works with our case of the level badges:
+
+    class PushActionStat < UserStat
+      level_badge 'Gangsta', 50
+      level_badge 'Homie', 20, :alt => Proc.new {|s| s.has_badge?('Gangsta')}
+      level_badge 'Shorty', 1, :alt => Proc.new {|s| s.has_badge?('Homie')}
+    end
+
+Because the evaluations are memoized, _regardless of which order the badges are evaluated_, each proc is called at most once.  And if you have 50+ pushes, only one proc is called that determines all three badges.
     
     
 ## Project evaluation

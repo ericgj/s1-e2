@@ -1,6 +1,6 @@
 source "http://gems.rubyforge.org"
 
-gem 'sqlite3-ruby'
+#gem 'sqlite3-ruby'
 gem 'dm-core'
 gem 'dm-migrations'
 gem 'dm-aggregates'
