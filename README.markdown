@@ -33,11 +33,12 @@ I took the approach that *all* badges are dynamic, in the sense that they are no
 
 This does mean that potentially a lot of queries would be run each time you want to determine the badges, but my approach was to optimize this by 
 
-  1. caching counts of relevant actions in a 'UserStat' model, which could be eager-loaded along with the user; and 
-  2. memoizing the badge evaluations so that each condition is evaluated at most once, even for badges that depend on or check for other badges.
+  1. caching counts of relevant actions in a 'UserStat' model, which could be eager-loaded along with the user;
+  2. memoizing the badge evaluations so that each condition is evaluated at most once, even for badges that depend on or check for other badges;
+  3. allowing you to specify less-expensive checks as preconditions to doing the evaluations; and
+  4. allowing you to specify checks that 'short-circuit' the evaluations (for instance, by specifying that one badge state implies another).
 
-Given the way I approached it, the suggestion in the description of the problem for how to optimize level-based badges 
-
+I think this is a flexible approach, as it _externalizes_ the logic used for optimizing in any particular case, rather than putting it within the implementation of badge types, etc.
 
 
 ## Basics of my 'badge DSL'
@@ -68,7 +69,7 @@ But also it makes it easier to deal with part of the problem I haven't tackled y
 
 __New as of 15 Sep__:
 
-You are allowed :if and :unless options when defining the badge conditions.  The idea is you could run a less-expensive proc first to check whether it is even possible that the user would have the badge, before running the (presumably more-expensive) badge evaluation.  
+You are allowed `:if` and `:unless` options when defining the badge conditions.  The idea is you could run a less-expensive proc first to check whether it is even possible that the user would have the badge, before running the (presumably more-expensive) badge evaluation.  
 
 So for instance in the case of the 'Bad Mother Forker' badge you could do:
 
