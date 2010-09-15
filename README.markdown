@@ -51,6 +51,8 @@ I found many advantages to separating out the `Badgeable` mechanics.  Unit testi
 
 But also it makes it easier to deal with part of the problem I haven't tackled yet, which is _collecting stats and assigning badges to users on the basis of actions on single repo's they own_.  I anticipate in the future making the Repo model `Badgeable`, and expanding the User badges method to pull in badges from their repos, as well as from their own actions.
 
+## Enhancements
+
 The other proposed enhancement is to allow :if and :unless options when defining the badge conditions.  The idea is you could run a less-expensive proc first to check whether it is even possible that the user would have the badge, before running the (presumably more-expensive) badge evaluation.  
 
 So for instance in the case of the 'Bad Mother Forker' badge you could do:
@@ -63,7 +65,14 @@ So for instance in the case of the 'Bad Mother Forker' badge you could do:
 
 That is, if you have less than 50 repos anyway, you can't possibly have 50+ forks, and it's (maybe) easier to check a cached `repos.count` than to run `stats.of_type`.
 
+Also, with a little more work we could then evaluate one badge on the basis of another -- which was one of the points of this exercise:
 
+    badge 'Beginner', :if => Proc.new {|u| u.has_badge?('Intermediate')}
+    badge 'Intermediate', :if => Proc.new {|u| u.has_badge?('Advanced')}
+    
+This brings into focus that you potentially end up evaluating badges multiple times, so ideally you would memoize the results.
+    
+    
 ## Project evaluation
 
 This was a great exercise, deceptively complicated as Greg put it (and more so the closer you look at it).
