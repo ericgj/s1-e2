@@ -1,5 +1,8 @@
+require 'rubygems'
+require "bundler"
+Bundler.setup(:default)
+
 module App
-  require 'rubygems'
   require 'dm-core'
 
   def self.connect(env)

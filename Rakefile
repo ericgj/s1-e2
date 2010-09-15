@@ -8,6 +8,7 @@ namespace :test do
   end
   
   task :setup do
+    Bundler.setup(:test)
     require 'bacon'
     #Bacon.extend Bacon::TestUnitOutput
     Bacon.summary_on_exit
