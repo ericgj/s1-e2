@@ -43,7 +43,9 @@ This gives you, at the class level, a macro style method `badge` for defining ba
     
 You can define as many badges as you like this way.
 
-On the instance level, you get a default method for evaluating all the badge procs:  `badges`.  This returns an array of the current evaluated badges as strings (the strings used to identify the badges).
+On the instance level, you get a method for evaluating a badge proc: `has_badge?`.  Note that the results of this evaluation are memoized.
+
+You also get a default method for evaluating all the badge procs:  `badges`.  This returns an array of the current evaluated badges as strings (the strings used to identify the badges).
 
 The User model wraps this #badges method and (among other things) converts the strings to Badge objects.
 
@@ -65,12 +67,12 @@ So for instance in the case of the 'Bad Mother Forker' badge you could do:
 
 That is, if you have less than 50 repos anyway, you can't possibly have 50+ forks, and it's (maybe) easier to check a cached `repos.count` than to run `stats.of_type`.
 
-Also, with a little more work we could then evaluate one badge on the basis of another -- which was one of the points of this exercise:
+Also, we could then evaluate one badge on the basis of another -- which was one of the points of this exercise:
 
     badge 'Beginner', :if => Proc.new {|u| u.has_badge?('Intermediate')}
     badge 'Intermediate', :if => Proc.new {|u| u.has_badge?('Advanced')}
     
-This brings into focus that you potentially end up evaluating badges multiple times, so ideally you would memoize the results.
+This brings into focus the importance of memoizing the results of the badge evaluations.  That way, in this case, _regardless of which order the badges are evaluated_, the 'Intermediate' badge proc is only called once.
     
     
 ## Project evaluation

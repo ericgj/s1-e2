@@ -13,11 +13,40 @@ class Dummy
   badge "Gold Star" do |t|
     t.count >= 50
   end
+    
+end
+
+class DummyDefaultBadge
+  extend Badgeable
+  include Badgeable::InstanceMethods
+  
+  badge 'default'
   
 end
 
+class DummyDependentBadges
+  extend Badgeable
+  include Badgeable::InstanceMethods
+
+  attr_accessor :switch
+  
+  badge('1') {|t| t.switch}
+  badge('2') {|t| t.has_badge?('1')}
+  badge('3') {|t| t.has_badge?('2') && t.has_badge?('1')}
+  
+end
+
+
 describe 'Badgeable', '#badges' do
 
+  describe 'when class defines a \'default\' badge without a block' do
+  
+    it 'test object should have the default badge' do
+      @subject = DummyDefaultBadge.new
+      @subject.badges.should.include 'default'
+    end
+  end
+  
   describe 'when test object name is Eric and count is 0' do
   
     before do
@@ -72,6 +101,53 @@ describe 'Badgeable', '#badges' do
     
     it 'should include Gold Star badge' do
       @subject.badges.should.include "Gold Star"
+    end
+    
+  end
+  
+  
+  describe 'when test object has dependent badges' do
+  
+    describe 'when switch = true' do
+      
+      before do
+        @subject = DummyDependentBadges.new
+        @subject.switch = true
+      end
+      
+      it 'should have badge 1' do
+        @subject.badges.should.include('1')
+      end
+      
+      it 'should have badge 2' do
+        @subject.badges.should.include('2')
+      end
+      
+      it 'should have badge 3' do
+        @subject.badges.should.include('3')
+      end
+      
+    end
+    
+    describe 'when switch = false' do
+      
+      before do
+        @subject = DummyDependentBadges.new
+        @subject.switch = false
+      end
+      
+      it 'should not have badge 1' do
+        @subject.badges.should.not.include('1')
+      end
+      
+      it 'should not have badge 2' do
+        @subject.badges.should.not.include('2')
+      end
+      
+      it 'should not have badge 3' do
+        @subject.badges.should.not.include('3')
+      end
+      
     end
     
   end
